@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, ActivityIndicator, ViewStyle, TextStyle } from 'react-native';
-import { COLORS } from '../../constants';
+import { COLORS, FONTS } from '../../constants';
 
 interface ButtonProps {
   title: string;
@@ -34,29 +34,37 @@ export default function Button({
   };
 
   const sizeStyles: Record<string, ViewStyle> = {
-    sm: { paddingVertical: 8, paddingHorizontal: 16 },
-    md: { paddingVertical: 14, paddingHorizontal: 24 },
-    lg: { paddingVertical: 18, paddingHorizontal: 32 },
+    sm: { height: 40, paddingHorizontal: 16 },
+    md: { height: 56, paddingHorizontal: 24 },
+    lg: { height: 56, paddingHorizontal: 32 },
   };
 
   const variantStyles: Record<string, ViewStyle> = {
     primary: { backgroundColor: COLORS.amber },
-    secondary: { backgroundColor: COLORS.navyLight },
-    outline: { backgroundColor: 'transparent', borderWidth: 1.5, borderColor: COLORS.amber },
+    secondary: {
+      backgroundColor: 'transparent',
+      borderWidth: 1,
+      borderColor: COLORS.slate,
+    },
+    outline: {
+      backgroundColor: 'transparent',
+      borderWidth: 1,
+      borderColor: COLORS.slate,
+    },
     ghost: { backgroundColor: 'transparent' },
   };
 
   const textColors: Record<string, string> = {
     primary: COLORS.navy,
     secondary: COLORS.white,
-    outline: COLORS.amber,
-    ghost: COLORS.amber,
+    outline: COLORS.white,
+    ghost: COLORS.slate,
   };
 
   const textSizes: Record<string, TextStyle> = {
     sm: { fontSize: 14 },
     md: { fontSize: 16 },
-    lg: { fontSize: 18 },
+    lg: { fontSize: 16 },
   };
 
   return (
@@ -79,8 +87,7 @@ export default function Button({
           style={[
             {
               color: textColors[variant],
-              fontWeight: '700',
-              letterSpacing: 0.3,
+              fontFamily: FONTS.semibold,
             },
             textSizes[size],
             textStyle,

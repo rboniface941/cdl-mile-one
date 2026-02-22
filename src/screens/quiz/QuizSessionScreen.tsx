@@ -2,10 +2,11 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
+import { X } from 'lucide-react-native';
 import ScreenWrapper from '../../components/common/ScreenWrapper';
 import ProgressBar from '../../components/common/ProgressBar';
 import Button from '../../components/common/Button';
-import { COLORS, DAILY_PRACTICE_COUNT, MOCK_EXAM_COUNT, MOCK_EXAM_MINUTES } from '../../constants';
+import { COLORS, FONTS, SPACING, DAILY_PRACTICE_COUNT, MOCK_EXAM_COUNT, MOCK_EXAM_MINUTES } from '../../constants';
 import { useQuiz, useQuizStats } from '../../hooks/useQuiz';
 import { useStreak } from '../../hooks/useStreak';
 import { useAuthContext } from '../../lib/AuthContext';
@@ -110,7 +111,7 @@ export default function QuizSessionScreen({ navigation, route }: Props) {
     return (
       <ScreenWrapper>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={{ color: COLORS.gray[400], fontSize: 16 }}>Loading questions...</Text>
+          <Text style={{ color: COLORS.slate, fontSize: 16, fontFamily: FONTS.regular }}>Loading questions...</Text>
         </View>
       </ScreenWrapper>
     );
@@ -132,27 +133,28 @@ export default function QuizSessionScreen({ navigation, route }: Props) {
   return (
     <ScreenWrapper>
       {/* Header Bar */}
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={{ color: COLORS.gray[400], fontSize: 16 }}>✕ Exit</Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: SPACING.xs }}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <X size={20} color={COLORS.slate} />
+          <Text style={{ color: COLORS.slate, fontSize: 16, fontFamily: FONTS.medium, marginLeft: 4 }}>Exit</Text>
         </TouchableOpacity>
-        <Text style={{ color: COLORS.gray[400], fontSize: 14, fontWeight: '600' }}>
+        <Text style={{ color: COLORS.slate, fontSize: 14, fontFamily: FONTS.medium }}>
           {modeLabels[mode]}
         </Text>
         {mode === 'mock' ? (
-          <Text style={{ color: timeLeft < 300 ? COLORS.error : COLORS.amber, fontSize: 16, fontWeight: '700' }}>
+          <Text style={{ color: timeLeft < 300 ? COLORS.error : COLORS.amber, fontSize: 16, fontFamily: FONTS.semibold }}>
             {formatTime(timeLeft)}
           </Text>
         ) : (
-          <Text style={{ color: COLORS.gray[400], fontSize: 14 }}>
+          <Text style={{ color: COLORS.slate, fontSize: 14, fontFamily: FONTS.regular }}>
             {quiz.score}/{quiz.currentIndex + (showFeedback ? 1 : 0)}
           </Text>
         )}
       </View>
 
       {/* Progress */}
-      <ProgressBar progress={quiz.progress} height={5} style={{ marginTop: 12, marginBottom: 4 }} />
-      <Text style={{ color: COLORS.gray[500], fontSize: 12, textAlign: 'right', marginBottom: 16 }}>
+      <ProgressBar progress={quiz.progress} height={5} style={{ marginTop: SPACING.sm, marginBottom: 4 }} />
+      <Text style={{ color: COLORS.slate, fontSize: 12, fontFamily: FONTS.regular, textAlign: 'right', marginBottom: SPACING.md }}>
         {quiz.currentIndex + 1} of {quiz.questions.length}
       </Text>
 
@@ -164,16 +166,16 @@ export default function QuizSessionScreen({ navigation, route }: Props) {
           borderRadius: 8,
           paddingHorizontal: 10,
           paddingVertical: 4,
-          marginBottom: 12,
+          marginBottom: SPACING.sm,
         }}
       >
-        <Text style={{ color: COLORS.amber, fontSize: 12, fontWeight: '600' }}>
+        <Text style={{ color: COLORS.amber, fontSize: 12, fontFamily: FONTS.medium }}>
           {quiz.currentQuestion.category}
         </Text>
       </View>
 
       {/* Question */}
-      <Text style={{ color: COLORS.white, fontSize: 19, fontWeight: '700', lineHeight: 28, marginBottom: 24 }}>
+      <Text style={{ color: COLORS.white, fontSize: 19, fontFamily: FONTS.semibold, letterSpacing: -0.02 * 19, lineHeight: 28, marginBottom: SPACING.lg }}>
         {quiz.currentQuestion.question_text}
       </Text>
 
@@ -183,7 +185,7 @@ export default function QuizSessionScreen({ navigation, route }: Props) {
           const isSelected = selectedAnswer === option.key;
           const isCorrect = option.key === quiz.currentQuestion!.correct_answer;
           let bgColor = COLORS.navyLight;
-          let borderColor = 'rgba(255,255,255,0.08)';
+          let borderColor = COLORS.navyMid;
 
           if (showFeedback) {
             if (isCorrect) {
@@ -205,10 +207,10 @@ export default function QuizSessionScreen({ navigation, route }: Props) {
               activeOpacity={0.7}
               style={{
                 backgroundColor: bgColor,
-                borderWidth: 1.5,
+                borderWidth: 1,
                 borderColor,
                 borderRadius: 14,
-                padding: 16,
+                padding: SPACING.md,
                 flexDirection: 'row',
                 alignItems: 'center',
               }}
@@ -221,14 +223,14 @@ export default function QuizSessionScreen({ navigation, route }: Props) {
                   backgroundColor: isSelected && !showFeedback ? COLORS.amber : 'rgba(255,255,255,0.1)',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  marginRight: 12,
+                  marginRight: SPACING.sm,
                 }}
               >
-                <Text style={{ color: isSelected && !showFeedback ? COLORS.navy : COLORS.white, fontWeight: '700', fontSize: 13 }}>
+                <Text style={{ color: isSelected && !showFeedback ? COLORS.navy : COLORS.white, fontFamily: FONTS.semibold, fontSize: 13 }}>
                   {option.key}
                 </Text>
               </View>
-              <Text style={{ color: COLORS.white, fontSize: 15, flex: 1, lineHeight: 21 }}>
+              <Text style={{ color: COLORS.white, fontSize: 15, fontFamily: FONTS.regular, flex: 1, lineHeight: 21 }}>
                 {option.text}
               </Text>
             </TouchableOpacity>
@@ -238,20 +240,20 @@ export default function QuizSessionScreen({ navigation, route }: Props) {
 
       {/* Feedback */}
       {showFeedback && (
-        <View style={{ marginTop: 20 }}>
+        <View style={{ marginTop: SPACING.cardPadding }}>
           <View
             style={{
               backgroundColor: wasCorrect ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)',
               borderRadius: 12,
               padding: 14,
-              marginBottom: 16,
+              marginBottom: SPACING.md,
             }}
           >
-            <Text style={{ color: wasCorrect ? COLORS.success : COLORS.error, fontSize: 14, fontWeight: '700', marginBottom: 4 }}>
+            <Text style={{ color: wasCorrect ? COLORS.success : COLORS.error, fontSize: 14, fontFamily: FONTS.semibold, marginBottom: 4 }}>
               {wasCorrect ? 'Correct!' : 'Incorrect'}
             </Text>
             {quiz.currentQuestion.explanation && (
-              <Text style={{ color: COLORS.gray[300], fontSize: 13, lineHeight: 19 }}>
+              <Text style={{ color: COLORS.slate, fontSize: 13, fontFamily: FONTS.regular, lineHeight: 19 }}>
                 {quiz.currentQuestion.explanation}
               </Text>
             )}

@@ -2,9 +2,10 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
+import { CheckCircle } from 'lucide-react-native';
 import ScreenWrapper from '../../components/common/ScreenWrapper';
 import Button from '../../components/common/Button';
-import { COLORS } from '../../constants';
+import { COLORS, FONTS, SPACING } from '../../constants';
 
 type Props = {
   navigation: NativeStackNavigationProp<any>;
@@ -28,14 +29,15 @@ export default function ApplySuccessScreen({ navigation, route }: Props) {
             marginBottom: 24,
           }}
         >
-          <Text style={{ fontSize: 48 }}>🎉</Text>
+          <CheckCircle size={48} color={COLORS.success} />
         </View>
 
         <Text
           style={{
             color: COLORS.white,
             fontSize: 24,
-            fontWeight: '800',
+            fontFamily: FONTS.semibold,
+            letterSpacing: -0.02 * 24,
             textAlign: 'center',
             marginBottom: 12,
           }}
@@ -45,8 +47,9 @@ export default function ApplySuccessScreen({ navigation, route }: Props) {
 
         <Text
           style={{
-            color: COLORS.gray[300],
+            color: COLORS.slate,
             fontSize: 15,
+            fontFamily: FONTS.regular,
             textAlign: 'center',
             lineHeight: 22,
             marginBottom: 32,

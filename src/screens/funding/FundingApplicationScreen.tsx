@@ -5,7 +5,7 @@ import ScreenWrapper from '../../components/common/ScreenWrapper';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import Card from '../../components/common/Card';
-import { COLORS } from '../../constants';
+import { COLORS, FONTS, SPACING } from '../../constants';
 import { useAuthContext } from '../../lib/AuthContext';
 import { supabase } from '../../lib/supabase';
 
@@ -67,41 +67,92 @@ export default function FundingApplicationScreen({ navigation }: Props) {
 
   return (
     <ScreenWrapper>
-      <View style={{ paddingTop: 16 }}>
-        <Text style={{ color: COLORS.white, fontSize: 24, fontWeight: '800', marginBottom: 4 }}>
+      <View style={{ paddingTop: SPACING.md }}>
+        <Text
+          style={{
+            color: COLORS.white,
+            fontSize: 24,
+            fontFamily: FONTS.semibold,
+            letterSpacing: -0.02 * 24,
+            marginBottom: 4,
+          }}
+        >
           Funding Application
         </Text>
-        <Text style={{ color: COLORS.gray[400], fontSize: 14, marginBottom: 24 }}>
+        <Text
+          style={{
+            color: COLORS.slate,
+            fontSize: 14,
+            fontFamily: FONTS.regular,
+            marginBottom: SPACING.lg,
+          }}
+        >
           Tell us about your situation
         </Text>
 
         {/* Pre-filled info */}
-        <Card style={{ marginBottom: 20 }}>
-          <Text style={{ color: COLORS.gray[400], fontSize: 12, fontWeight: '600', marginBottom: 8 }}>
+        <Card style={{ marginBottom: SPACING.cardPadding }}>
+          <Text
+            style={{
+              color: COLORS.slate,
+              fontSize: 12,
+              fontFamily: FONTS.medium,
+              marginBottom: SPACING.xs,
+            }}
+          >
             YOUR INFO
           </Text>
-          <Text style={{ color: COLORS.white, fontSize: 15, fontWeight: '600' }}>
+          <Text
+            style={{
+              color: COLORS.white,
+              fontSize: 15,
+              fontFamily: FONTS.semibold,
+            }}
+          >
             {profile?.full_name || 'N/A'}
           </Text>
-          <Text style={{ color: COLORS.gray[400], fontSize: 13, marginTop: 2 }}>
+          <Text
+            style={{
+              color: COLORS.slate,
+              fontSize: 13,
+              fontFamily: FONTS.regular,
+              marginTop: 2,
+            }}
+          >
             {profile?.email} · {profile?.phone}
           </Text>
         </Card>
 
         {/* Loan Amount Slider */}
-        <Card style={{ marginBottom: 20 }}>
-          <Text style={{ color: COLORS.gray[400], fontSize: 12, fontWeight: '600', marginBottom: 12 }}>
+        <Card style={{ marginBottom: SPACING.cardPadding }}>
+          <Text
+            style={{
+              color: COLORS.slate,
+              fontSize: 12,
+              fontFamily: FONTS.medium,
+              marginBottom: SPACING.sm,
+            }}
+          >
             DESIRED LOAN AMOUNT
           </Text>
-          <Text style={{ color: COLORS.amber, fontSize: 32, fontWeight: '800', textAlign: 'center', marginBottom: 12 }}>
+          <Text
+            style={{
+              color: COLORS.amber,
+              fontSize: 32,
+              fontFamily: FONTS.semibold,
+              letterSpacing: -0.02 * 32,
+              textAlign: 'center',
+              marginBottom: SPACING.sm,
+            }}
+          >
             ${loanAmount.toLocaleString()}
           </Text>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
-            <Text style={{ color: COLORS.gray[500], fontSize: 12 }}>$1,000</Text>
-            <Text style={{ color: COLORS.gray[500], fontSize: 12 }}>$10,000</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: SPACING.xs }}>
+            <Text style={{ color: COLORS.slate, fontSize: 12, fontFamily: FONTS.regular }}>$1,000</Text>
+            <Text style={{ color: COLORS.slate, fontSize: 12, fontFamily: FONTS.regular }}>$10,000</Text>
           </View>
           {/* Slider buttons since RN Slider needs extra package */}
-          <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 12, marginTop: 8 }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'center', gap: SPACING.sm, marginTop: SPACING.xs }}>
             {[3000, 5000, 7000, 10000].map((amount) => (
               <Button
                 key={amount}
@@ -110,17 +161,24 @@ export default function FundingApplicationScreen({ navigation }: Props) {
                 size="sm"
                 fullWidth={false}
                 onPress={() => setLoanAmount(amount)}
-                style={{ paddingHorizontal: 16 }}
+                style={{ paddingHorizontal: SPACING.md }}
               />
             ))}
           </View>
         </Card>
 
         {/* Employment Status */}
-        <Text style={{ color: COLORS.gray[300], fontSize: 14, fontWeight: '500', marginBottom: 10 }}>
+        <Text
+          style={{
+            color: COLORS.slate,
+            fontSize: 14,
+            fontFamily: FONTS.medium,
+            marginBottom: 10,
+          }}
+        >
           Employment Status
         </Text>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 20 }}>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: SPACING.xs, marginBottom: SPACING.cardPadding }}>
           {EMPLOYMENT_OPTIONS.map((option) => (
             <Button
               key={option}
@@ -155,7 +213,7 @@ export default function FundingApplicationScreen({ navigation }: Props) {
           title="Submit Application"
           onPress={handleSubmit}
           loading={loading}
-          style={{ marginTop: 8 }}
+          style={{ marginTop: SPACING.xs }}
         />
       </View>
     </ScreenWrapper>

@@ -5,24 +5,26 @@ export const COLORS = {
   navyLight: '#1E293B',
   navyMid: '#334155',
   amber: '#F59E0B',
-  amberDark: '#D97706',
-  amberLight: '#FDE68A',
   white: '#FFFFFF',
-  gray: {
-    50: '#F9FAFB',
-    100: '#F3F4F6',
-    200: '#E5E7EB',
-    300: '#D1D5DB',
-    400: '#9CA3AF',
-    500: '#6B7280',
-    600: '#4B5563',
-    700: '#374151',
-    800: '#1F2937',
-    900: '#111827',
-  },
+  slate: '#94A3B8',
   success: '#22C55E',
   error: '#EF4444',
-  warning: '#F59E0B',
+};
+
+export const FONTS = {
+  regular: 'Inter_400Regular',
+  medium: 'Inter_500Medium',
+  semibold: 'Inter_600SemiBold',
+};
+
+export const SPACING = {
+  xs: 8,
+  sm: 12,
+  md: 16,
+  lg: 24,
+  xl: 32,
+  screenPadding: 24,
+  cardPadding: 20,
 };
 
 export const QUIZ_CATEGORIES: QuizCategory[] = [
@@ -39,10 +41,10 @@ export const QUIZ_CATEGORIES: QuizCategory[] = [
 ];
 
 export const CDL_STAGES = [
-  { value: 'researching', label: 'Just researching', emoji: '🔍' },
-  { value: 'ready_to_enroll', label: 'Ready to enroll in school', emoji: '📝' },
-  { value: 'in_school', label: 'Currently in school', emoji: '📚' },
-  { value: 'graduated', label: 'Recently graduated', emoji: '🎓' },
+  { value: 'researching', label: 'Just researching' },
+  { value: 'ready_to_enroll', label: 'Ready to enroll in school' },
+  { value: 'in_school', label: 'Currently in school' },
+  { value: 'graduated', label: 'Recently graduated' },
 ] as const;
 
 export const ENDORSEMENTS = [

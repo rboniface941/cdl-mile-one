@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { CheckCircle } from 'lucide-react-native';
 import ScreenWrapper from '../../components/common/ScreenWrapper';
 import Button from '../../components/common/Button';
-import { COLORS } from '../../constants';
+import { COLORS, FONTS, SPACING } from '../../constants';
 
 type Props = {
   navigation: NativeStackNavigationProp<any>;
@@ -21,19 +22,20 @@ export default function FundingConfirmationScreen({ navigation }: Props) {
             backgroundColor: 'rgba(34, 197, 94, 0.15)',
             justifyContent: 'center',
             alignItems: 'center',
-            marginBottom: 24,
+            marginBottom: SPACING.lg,
           }}
         >
-          <Text style={{ fontSize: 48 }}>✓</Text>
+          <CheckCircle size={48} color={COLORS.success} />
         </View>
 
         <Text
           style={{
             color: COLORS.white,
             fontSize: 24,
-            fontWeight: '800',
+            fontFamily: FONTS.semibold,
+            letterSpacing: -0.02 * 24,
             textAlign: 'center',
-            marginBottom: 12,
+            marginBottom: SPACING.sm,
           }}
         >
           Application Submitted!
@@ -41,12 +43,13 @@ export default function FundingConfirmationScreen({ navigation }: Props) {
 
         <Text
           style={{
-            color: COLORS.gray[300],
+            color: COLORS.slate,
             fontSize: 15,
+            fontFamily: FONTS.regular,
             textAlign: 'center',
             lineHeight: 22,
-            marginBottom: 32,
-            paddingHorizontal: 20,
+            marginBottom: SPACING.xl,
+            paddingHorizontal: SPACING.cardPadding,
           }}
         >
           A funding specialist will contact you within 1 business day to discuss your options.

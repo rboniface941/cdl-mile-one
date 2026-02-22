@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, Alert } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
+import { Truck } from 'lucide-react-native';
 import ScreenWrapper from '../../components/common/ScreenWrapper';
 import Button from '../../components/common/Button';
 import Card from '../../components/common/Card';
 import ProgressBar from '../../components/common/ProgressBar';
-import { COLORS } from '../../constants';
+import { COLORS, FONTS, SPACING } from '../../constants';
 import { useAuthContext } from '../../lib/AuthContext';
 import { supabase } from '../../lib/supabase';
 import { Carrier } from '../../types';
@@ -59,28 +60,28 @@ export default function ApplyAllScreen({ navigation, route }: Props) {
   return (
     <ScreenWrapper>
       <View style={{ paddingTop: 16 }}>
-        <Text style={{ color: COLORS.white, fontSize: 24, fontWeight: '800', marginBottom: 4 }}>
+        <Text style={{ color: COLORS.white, fontSize: 24, fontFamily: FONTS.semibold, letterSpacing: -0.02 * 24, marginBottom: 4 }}>
           Apply to All Carriers
         </Text>
-        <Text style={{ color: COLORS.gray[400], fontSize: 14, marginBottom: 20 }}>
+        <Text style={{ color: COLORS.slate, fontSize: 14, fontFamily: FONTS.regular, marginBottom: 20 }}>
           Review your application before confirming
         </Text>
 
         {/* Profile Completeness */}
         <Card style={{ marginBottom: 20 }}>
-          <Text style={{ color: COLORS.gray[400], fontSize: 12, fontWeight: '600', marginBottom: 8 }}>
+          <Text style={{ color: COLORS.slate, fontSize: 12, fontFamily: FONTS.medium, marginBottom: 8 }}>
             PROFILE COMPLETENESS
           </Text>
           <ProgressBar progress={completeness / 100} showLabel height={8} />
           {completeness < 80 && (
-            <Text style={{ color: COLORS.amber, fontSize: 12, marginTop: 8 }}>
+            <Text style={{ color: COLORS.amber, fontSize: 12, fontFamily: FONTS.regular, marginTop: 8 }}>
               Tip: Complete your profile to increase your chances of getting hired.
             </Text>
           )}
         </Card>
 
         {/* Carrier List */}
-        <Text style={{ color: COLORS.white, fontSize: 16, fontWeight: '700', marginBottom: 12 }}>
+        <Text style={{ color: COLORS.white, fontSize: 16, fontFamily: FONTS.semibold, letterSpacing: -0.02 * 16, marginBottom: 12 }}>
           Applying to {carriers.length} carriers:
         </Text>
 
@@ -99,13 +100,13 @@ export default function ApplyAllScreen({ navigation, route }: Props) {
                     marginRight: 12,
                   }}
                 >
-                  <Text style={{ fontSize: 16 }}>🚛</Text>
+                  <Truck size={16} color={COLORS.amber} />
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text style={{ color: COLORS.white, fontSize: 14, fontWeight: '600' }}>
+                  <Text style={{ color: COLORS.white, fontSize: 14, fontFamily: FONTS.medium }}>
                     {carrier.company_name}
                   </Text>
-                  <Text style={{ color: COLORS.gray[400], fontSize: 12 }}>
+                  <Text style={{ color: COLORS.slate, fontSize: 12, fontFamily: FONTS.regular }}>
                     {carrier.pay_range} · {carrier.home_time}
                   </Text>
                 </View>

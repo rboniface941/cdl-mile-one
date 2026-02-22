@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Truck, MapPin } from 'lucide-react-native';
 import ScreenWrapper from '../../components/common/ScreenWrapper';
 import Button from '../../components/common/Button';
 import Card from '../../components/common/Card';
 import ProgressBar from '../../components/common/ProgressBar';
-import { COLORS, EQUIPMENT_TYPES } from '../../constants';
+import { COLORS, FONTS, SPACING, EQUIPMENT_TYPES } from '../../constants';
 import { useAuthContext } from '../../lib/AuthContext';
 import { supabase } from '../../lib/supabase';
 import { Carrier, DriverProfile } from '../../types';
@@ -119,13 +120,13 @@ export default function JobsHomeScreen({ navigation }: Props) {
                 marginBottom: 12,
               }}
             >
-              <Text style={{ fontSize: 20 }}>🚛</Text>
+              <Truck size={20} color={COLORS.amber} />
             </View>
 
-            <Text style={{ color: COLORS.white, fontSize: 17, fontWeight: '700', marginBottom: 4 }}>
+            <Text style={{ color: COLORS.white, fontSize: 17, fontFamily: FONTS.semibold, letterSpacing: -0.02 * 17, marginBottom: 4 }}>
               {item.company_name}
             </Text>
-            <Text style={{ color: COLORS.gray[400], fontSize: 13, marginBottom: 10 }}>
+            <Text style={{ color: COLORS.slate, fontSize: 13, fontFamily: FONTS.regular, marginBottom: 10 }}>
               {item.job_title}
             </Text>
           </View>
@@ -143,7 +144,7 @@ export default function JobsHomeScreen({ navigation }: Props) {
                 style={{
                   color: matchScore >= 70 ? COLORS.success : COLORS.amber,
                   fontSize: 12,
-                  fontWeight: '700',
+                  fontFamily: FONTS.semibold,
                 }}
               >
                 {matchScore}% match
@@ -155,23 +156,26 @@ export default function JobsHomeScreen({ navigation }: Props) {
         {/* Details */}
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginBottom: 14 }}>
           <View>
-            <Text style={{ color: COLORS.gray[500], fontSize: 11, fontWeight: '600' }}>PAY</Text>
-            <Text style={{ color: COLORS.amber, fontSize: 14, fontWeight: '700' }}>{item.pay_range}</Text>
+            <Text style={{ color: COLORS.slate, fontSize: 11, fontFamily: FONTS.medium }}>PAY</Text>
+            <Text style={{ color: COLORS.amber, fontSize: 14, fontFamily: FONTS.semibold }}>{item.pay_range}</Text>
           </View>
           <View>
-            <Text style={{ color: COLORS.gray[500], fontSize: 11, fontWeight: '600' }}>HOME TIME</Text>
-            <Text style={{ color: COLORS.white, fontSize: 14 }}>{item.home_time}</Text>
+            <Text style={{ color: COLORS.slate, fontSize: 11, fontFamily: FONTS.medium }}>HOME TIME</Text>
+            <Text style={{ color: COLORS.white, fontSize: 14, fontFamily: FONTS.regular }}>{item.home_time}</Text>
           </View>
           <View>
-            <Text style={{ color: COLORS.gray[500], fontSize: 11, fontWeight: '600' }}>EQUIPMENT</Text>
-            <Text style={{ color: COLORS.white, fontSize: 14 }}>{item.equipment_type}</Text>
+            <Text style={{ color: COLORS.slate, fontSize: 11, fontFamily: FONTS.medium }}>EQUIPMENT</Text>
+            <Text style={{ color: COLORS.white, fontSize: 14, fontFamily: FONTS.regular }}>{item.equipment_type}</Text>
           </View>
         </View>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <Text style={{ color: COLORS.gray[500], fontSize: 12 }}>📍 {item.location}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+            <MapPin size={14} color={COLORS.slate} />
+            <Text style={{ color: COLORS.slate, fontSize: 12, fontFamily: FONTS.regular }}>{item.location}</Text>
+          </View>
           {item.requirements && (
-            <Text style={{ color: COLORS.gray[500], fontSize: 12 }}>· {item.requirements}</Text>
+            <Text style={{ color: COLORS.slate, fontSize: 12, fontFamily: FONTS.regular }}>· {item.requirements}</Text>
           )}
         </View>
 
@@ -191,10 +195,10 @@ export default function JobsHomeScreen({ navigation }: Props) {
     <ScreenWrapper scrollable={false} padding={false}>
       <View style={{ paddingHorizontal: 20, paddingTop: 16 }}>
         {/* Header */}
-        <Text style={{ color: COLORS.white, fontSize: 28, fontWeight: '800', marginBottom: 4 }}>
+        <Text style={{ color: COLORS.white, fontSize: 28, fontFamily: FONTS.semibold, letterSpacing: -0.02 * 28, marginBottom: 4 }}>
           Jobs
         </Text>
-        <Text style={{ color: COLORS.gray[400], fontSize: 14, marginBottom: 16 }}>
+        <Text style={{ color: COLORS.slate, fontSize: 14, fontFamily: FONTS.regular, marginBottom: 16 }}>
           CDL Job Board
         </Text>
 
@@ -202,16 +206,16 @@ export default function JobsHomeScreen({ navigation }: Props) {
         {completeness < 100 && (
           <Card style={{ marginBottom: 16 }} padding={14}>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-              <Text style={{ color: COLORS.white, fontSize: 14, fontWeight: '600' }}>
+              <Text style={{ color: COLORS.white, fontSize: 14, fontFamily: FONTS.medium }}>
                 Complete your profile
               </Text>
-              <Text style={{ color: COLORS.amber, fontSize: 13, fontWeight: '700' }}>
+              <Text style={{ color: COLORS.amber, fontSize: 13, fontFamily: FONTS.semibold }}>
                 Visible to {visibleCarriers} carriers
               </Text>
             </View>
             <ProgressBar progress={completeness / 100} height={5} />
             <TouchableOpacity onPress={() => navigation.navigate('ProfileBuilder')}>
-              <Text style={{ color: COLORS.amber, fontSize: 13, fontWeight: '600', marginTop: 8 }}>
+              <Text style={{ color: COLORS.amber, fontSize: 13, fontFamily: FONTS.medium, marginTop: 8 }}>
                 Build Profile →
               </Text>
             </TouchableOpacity>
@@ -239,7 +243,7 @@ export default function JobsHomeScreen({ navigation }: Props) {
               onPress={() => setSelectedFilter(item)}
               style={{
                 backgroundColor: selectedFilter === item ? COLORS.amber : COLORS.navyLight,
-                borderRadius: 20,
+                borderRadius: 12,
                 paddingHorizontal: 16,
                 paddingVertical: 8,
                 marginRight: 8,
@@ -247,9 +251,9 @@ export default function JobsHomeScreen({ navigation }: Props) {
             >
               <Text
                 style={{
-                  color: selectedFilter === item ? COLORS.navy : COLORS.gray[400],
+                  color: selectedFilter === item ? COLORS.navy : COLORS.slate,
                   fontSize: 13,
-                  fontWeight: '600',
+                  fontFamily: FONTS.medium,
                 }}
               >
                 {item}
@@ -268,7 +272,7 @@ export default function JobsHomeScreen({ navigation }: Props) {
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           <View style={{ alignItems: 'center', paddingTop: 40 }}>
-            <Text style={{ color: COLORS.gray[500], fontSize: 15 }}>
+            <Text style={{ color: COLORS.slate, fontSize: 15, fontFamily: FONTS.regular }}>
               No carriers match this filter
             </Text>
           </View>

@@ -6,7 +6,7 @@ import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import Card from '../../components/common/Card';
 import ProgressBar from '../../components/common/ProgressBar';
-import { COLORS, ENDORSEMENTS, EQUIPMENT_TYPES, JOB_TYPES, US_STATES } from '../../constants';
+import { COLORS, FONTS, ENDORSEMENTS, EQUIPMENT_TYPES, JOB_TYPES, US_STATES } from '../../constants';
 import { useAuthContext } from '../../lib/AuthContext';
 import { supabase } from '../../lib/supabase';
 import { DriverProfile, Employer, Address } from '../../types';
@@ -133,7 +133,7 @@ export default function ProfileBuilderScreen({ navigation }: Props) {
                   <Text style={{
                     color: driverProfile.cdl_class === cls ? COLORS.navy : COLORS.white,
                     fontSize: 20,
-                    fontWeight: '800',
+                    fontFamily: FONTS.semibold,
                   }}>
                     Class {cls}
                   </Text>
@@ -156,9 +156,9 @@ export default function ProfileBuilderScreen({ navigation }: Props) {
                     }}
                   >
                     <Text style={{
-                      color: driverProfile.state_issued === st ? COLORS.navy : COLORS.gray[400],
+                      color: driverProfile.state_issued === st ? COLORS.navy : COLORS.slate,
                       fontSize: 14,
-                      fontWeight: '600',
+                      fontFamily: FONTS.medium,
                     }}>
                       {st}
                     </Text>
@@ -175,15 +175,15 @@ export default function ProfileBuilderScreen({ navigation }: Props) {
                   onPress={() => toggleEndorsement(e)}
                   style={{
                     backgroundColor: driverProfile.endorsements?.includes(e) ? COLORS.amber : COLORS.navyLight,
-                    borderRadius: 10,
+                    borderRadius: 12,
                     paddingHorizontal: 14,
                     paddingVertical: 10,
                   }}
                 >
                   <Text style={{
-                    color: driverProfile.endorsements?.includes(e) ? COLORS.navy : COLORS.gray[300],
+                    color: driverProfile.endorsements?.includes(e) ? COLORS.navy : COLORS.slate,
                     fontSize: 14,
-                    fontWeight: '600',
+                    fontFamily: FONTS.medium,
                   }}>
                     {e}
                   </Text>
@@ -223,7 +223,7 @@ export default function ProfileBuilderScreen({ navigation }: Props) {
                   <Text style={{
                     color: driverProfile.job_type === type ? COLORS.navy : COLORS.white,
                     fontSize: 16,
-                    fontWeight: '700',
+                    fontFamily: FONTS.semibold,
                   }}>
                     {type === 'OTR' ? 'Over the Road (OTR)' : type}
                   </Text>
@@ -239,15 +239,15 @@ export default function ProfileBuilderScreen({ navigation }: Props) {
                   onPress={() => toggleEquipment(e)}
                   style={{
                     backgroundColor: driverProfile.equipment_preference?.includes(e) ? COLORS.amber : COLORS.navyLight,
-                    borderRadius: 10,
+                    borderRadius: 12,
                     paddingHorizontal: 14,
                     paddingVertical: 10,
                   }}
                 >
                   <Text style={{
-                    color: driverProfile.equipment_preference?.includes(e) ? COLORS.navy : COLORS.gray[300],
+                    color: driverProfile.equipment_preference?.includes(e) ? COLORS.navy : COLORS.slate,
                     fontSize: 14,
-                    fontWeight: '600',
+                    fontFamily: FONTS.medium,
                   }}>
                     {e}
                   </Text>
@@ -273,7 +273,7 @@ export default function ProfileBuilderScreen({ navigation }: Props) {
             </View>
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <Text style={{ color: COLORS.gray[300], fontSize: 15 }}>Willing to relocate?</Text>
+              <Text style={{ color: COLORS.slate, fontSize: 15, fontFamily: FONTS.regular }}>Willing to relocate?</Text>
               <Switch
                 value={driverProfile.willing_to_relocate}
                 onValueChange={(val) => setDriverProfile(p => ({ ...p, willing_to_relocate: val }))}
@@ -299,7 +299,7 @@ export default function ProfileBuilderScreen({ navigation }: Props) {
             />
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <Text style={{ color: COLORS.gray[300], fontSize: 15 }}>Fresh CDL graduate?</Text>
+              <Text style={{ color: COLORS.slate, fontSize: 15, fontFamily: FONTS.regular }}>Fresh CDL graduate?</Text>
               <Switch
                 value={driverProfile.is_fresh_graduate}
                 onValueChange={(val) => setDriverProfile(p => ({ ...p, is_fresh_graduate: val }))}
@@ -311,8 +311,8 @@ export default function ProfileBuilderScreen({ navigation }: Props) {
             <Text style={styles.label}>Previous Employers (up to 5)</Text>
             {(driverProfile.previous_employers || []).map((emp, idx) => (
               <Card key={idx} style={{ marginBottom: 10 }} padding={12}>
-                <Text style={{ color: COLORS.white, fontSize: 14, fontWeight: '600' }}>{emp.name}</Text>
-                <Text style={{ color: COLORS.gray[400], fontSize: 12 }}>
+                <Text style={{ color: COLORS.white, fontSize: 14, fontFamily: FONTS.medium }}>{emp.name}</Text>
+                <Text style={{ color: COLORS.slate, fontSize: 12, fontFamily: FONTS.regular }}>
                   {emp.start_date} — {emp.end_date} · {emp.equipment_operated}
                 </Text>
               </Card>
@@ -337,7 +337,7 @@ export default function ProfileBuilderScreen({ navigation }: Props) {
 
             <Card style={{ marginBottom: 16 }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                <Text style={{ color: COLORS.white, fontSize: 15 }}>Accidents in last 3 years?</Text>
+                <Text style={{ color: COLORS.white, fontSize: 15, fontFamily: FONTS.regular }}>Accidents in last 3 years?</Text>
                 <Switch
                   value={driverProfile.has_accidents}
                   onValueChange={(val) => setDriverProfile(p => ({ ...p, has_accidents: val }))}
@@ -359,7 +359,7 @@ export default function ProfileBuilderScreen({ navigation }: Props) {
 
             <Card style={{ marginBottom: 16 }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                <Text style={{ color: COLORS.white, fontSize: 15 }}>Traffic violations in last 3 years?</Text>
+                <Text style={{ color: COLORS.white, fontSize: 15, fontFamily: FONTS.regular }}>Traffic violations in last 3 years?</Text>
                 <Switch
                   value={driverProfile.has_violations}
                   onValueChange={(val) => setDriverProfile(p => ({ ...p, has_violations: val }))}
@@ -381,7 +381,7 @@ export default function ProfileBuilderScreen({ navigation }: Props) {
 
             <Card>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: COLORS.white, fontSize: 15 }}>DUI/DWI in last 10 years?</Text>
+                <Text style={{ color: COLORS.white, fontSize: 15, fontFamily: FONTS.regular }}>DUI/DWI in last 10 years?</Text>
                 <Switch
                   value={driverProfile.has_dui}
                   onValueChange={(val) => setDriverProfile(p => ({ ...p, has_dui: val }))}
@@ -408,7 +408,7 @@ export default function ProfileBuilderScreen({ navigation }: Props) {
             <Text style={[styles.label, { marginTop: 16 }]}>Previous Addresses</Text>
             {(driverProfile.previous_addresses || []).map((addr, idx) => (
               <Card key={idx} style={{ marginBottom: 10 }} padding={12}>
-                <Text style={{ color: COLORS.white, fontSize: 14 }}>
+                <Text style={{ color: COLORS.white, fontSize: 14, fontFamily: FONTS.regular }}>
                   {addr.street}, {addr.city}, {addr.state} {addr.zip}
                 </Text>
               </Card>
@@ -436,8 +436,8 @@ export default function ProfileBuilderScreen({ navigation }: Props) {
         {/* Progress Header */}
         <View style={{ marginBottom: 24 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-            <Text style={{ color: COLORS.gray[400], fontSize: 13 }}>Step {step} of {TOTAL_STEPS}</Text>
-            <Text style={{ color: COLORS.amber, fontSize: 13, fontWeight: '600' }}>
+            <Text style={{ color: COLORS.slate, fontSize: 13, fontFamily: FONTS.regular }}>Step {step} of {TOTAL_STEPS}</Text>
+            <Text style={{ color: COLORS.amber, fontSize: 13, fontFamily: FONTS.medium }}>
               Visible to {visibleCarriers} carriers
             </Text>
           </View>
@@ -569,18 +569,20 @@ const styles = {
   stepTitle: {
     color: COLORS.white,
     fontSize: 24,
-    fontWeight: '800' as const,
+    fontFamily: FONTS.semibold,
+    letterSpacing: -0.02 * 24,
     marginBottom: 4,
   },
   stepDesc: {
-    color: COLORS.gray[400],
+    color: COLORS.slate,
     fontSize: 14,
+    fontFamily: FONTS.regular,
     marginBottom: 24,
   },
   label: {
-    color: COLORS.gray[300],
+    color: COLORS.slate,
     fontSize: 14,
-    fontWeight: '500' as const,
+    fontFamily: FONTS.medium,
     marginBottom: 10,
   },
 };

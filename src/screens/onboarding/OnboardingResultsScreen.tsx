@@ -5,7 +5,7 @@ import ScreenWrapper from '../../components/common/ScreenWrapper';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import Card from '../../components/common/Card';
-import { COLORS } from '../../constants';
+import { COLORS, FONTS, SPACING } from '../../constants';
 import { useOnboarding } from '../../lib/OnboardingContext';
 import { useAuthContext } from '../../lib/AuthContext';
 
@@ -56,50 +56,75 @@ export default function OnboardingResultsScreen({ navigation }: Props) {
 
   return (
     <ScreenWrapper>
-      <View style={{ flex: 1, paddingTop: 32 }}>
+      <View style={{ flex: 1, paddingTop: SPACING.xl }}>
         {/* Score Display */}
-        <View style={{ alignItems: 'center', marginBottom: 32 }}>
+        <View style={{ alignItems: 'center', marginBottom: SPACING.xl }}>
           <View
             style={{
               width: 120,
               height: 120,
               borderRadius: 60,
-              borderWidth: 4,
+              borderWidth: 3,
               borderColor: percentage >= 70 ? COLORS.success : COLORS.amber,
               justifyContent: 'center',
               alignItems: 'center',
-              marginBottom: 16,
+              marginBottom: SPACING.md,
             }}
           >
-            <Text style={{ color: COLORS.white, fontSize: 36, fontWeight: '800' }}>
+            <Text
+              style={{
+                color: COLORS.white,
+                fontSize: 36,
+                fontFamily: FONTS.semibold,
+                letterSpacing: -0.02 * 36,
+              }}
+            >
               {percentage}%
             </Text>
           </View>
-          <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '600', textAlign: 'center' }}>
+          <Text
+            style={{
+              color: COLORS.white,
+              fontSize: 18,
+              fontFamily: FONTS.semibold,
+              textAlign: 'center',
+              letterSpacing: -0.02 * 18,
+            }}
+          >
             {state.quizScore} out of {state.quizTotal} correct
           </Text>
-          <Text style={{ color: COLORS.gray[400], fontSize: 15, marginTop: 8, textAlign: 'center' }}>
+          <Text
+            style={{
+              color: COLORS.slate,
+              fontSize: 15,
+              fontFamily: FONTS.regular,
+              marginTop: SPACING.xs,
+              textAlign: 'center',
+            }}
+          >
             {getMessage()}
           </Text>
         </View>
 
         {/* Sign Up Form */}
-        <Card style={{ marginBottom: 20 }}>
+        <Card style={{ marginBottom: SPACING.cardPadding }}>
           <Text
             style={{
               color: COLORS.white,
               fontSize: 18,
-              fontWeight: '700',
+              fontFamily: FONTS.semibold,
               marginBottom: 4,
+              letterSpacing: -0.02 * 18,
             }}
           >
             Save your progress
           </Text>
           <Text
             style={{
-              color: COLORS.gray[400],
+              color: COLORS.slate,
               fontSize: 14,
-              marginBottom: 20,
+              fontFamily: FONTS.regular,
+              marginBottom: SPACING.cardPadding,
             }}
           >
             Create a free account to track your study progress and access all features.
@@ -139,7 +164,7 @@ export default function OnboardingResultsScreen({ navigation }: Props) {
             title="Create Account & Continue"
             onPress={handleSignUp}
             loading={loading}
-            style={{ marginTop: 8 }}
+            style={{ marginTop: SPACING.xs }}
           />
         </Card>
       </View>

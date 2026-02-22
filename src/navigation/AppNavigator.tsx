@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { BookOpen, Banknote, Briefcase } from 'lucide-react-native';
 import { useAuthContext } from '../lib/AuthContext';
 import { useOnboarding } from '../lib/OnboardingContext';
-import { COLORS } from '../constants';
+import { COLORS, FONTS } from '../constants';
 
 // Onboarding Screens
 import StageSelectScreen from '../screens/onboarding/StageSelectScreen';
@@ -60,7 +61,6 @@ function QuizStackNavigator() {
   );
 }
 
-// Entry screens that redirect to QuizSession with params
 function DailyPracticeEntry({ navigation }: any) {
   React.useEffect(() => {
     navigation.replace('QuizSession', { mode: 'daily' });
@@ -96,26 +96,32 @@ function JobsStackNavigator() {
   );
 }
 
+const TAB_ICONS: Record<string, React.ComponentType<any>> = {
+  Study: BookOpen,
+  Funding: Banknote,
+  Jobs: Briefcase,
+};
+
 function TabIcon({ name, focused, badge }: { name: string; focused: boolean; badge?: boolean }) {
-  const icons: Record<string, string> = {
-    Study: '📝',
-    Funding: '💰',
-    Jobs: '🚛',
-  };
+  const IconComponent = TAB_ICONS[name] || BookOpen;
 
   return (
     <View style={{ alignItems: 'center', paddingTop: 6 }}>
       <View>
-        <Text style={{ fontSize: 22 }}>{icons[name] || '📋'}</Text>
+        <IconComponent
+          size={22}
+          color={focused ? COLORS.amber : COLORS.slate}
+          strokeWidth={focused ? 2.5 : 2}
+        />
         {badge && (
           <View
             style={{
               position: 'absolute',
               top: -2,
               right: -6,
-              width: 10,
-              height: 10,
-              borderRadius: 5,
+              width: 8,
+              height: 8,
+              borderRadius: 4,
               backgroundColor: COLORS.amber,
             }}
           />
@@ -123,9 +129,9 @@ function TabIcon({ name, focused, badge }: { name: string; focused: boolean; bad
       </View>
       <Text
         style={{
-          color: focused ? COLORS.amber : COLORS.gray[500],
+          color: focused ? COLORS.amber : COLORS.slate,
           fontSize: 11,
-          fontWeight: focused ? '700' : '500',
+          fontFamily: focused ? FONTS.semibold : FONTS.medium,
           marginTop: 4,
         }}
       >
@@ -145,7 +151,7 @@ function MainTabs() {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: COLORS.navy,
-          borderTopColor: 'rgba(255,255,255,0.05)',
+          borderTopColor: COLORS.navyMid,
           borderTopWidth: 1,
           height: 80,
           paddingBottom: 20,
@@ -197,7 +203,9 @@ export default function AppNavigator() {
     return (
       <View style={{ flex: 1, backgroundColor: COLORS.navy, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color={COLORS.amber} />
-        <Text style={{ color: COLORS.gray[400], fontSize: 14, marginTop: 12 }}>Loading...</Text>
+        <Text style={{ color: COLORS.slate, fontSize: 14, fontFamily: FONTS.regular, marginTop: 12 }}>
+          Loading...
+        </Text>
       </View>
     );
   }

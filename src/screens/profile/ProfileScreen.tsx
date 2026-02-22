@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Flame } from 'lucide-react-native';
 import ScreenWrapper from '../../components/common/ScreenWrapper';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import ProgressBar from '../../components/common/ProgressBar';
-import { COLORS, CDL_STAGES } from '../../constants';
+import { COLORS, FONTS, CDL_STAGES } from '../../constants';
 import { useAuthContext } from '../../lib/AuthContext';
 import { useQuizStats } from '../../hooks/useQuiz';
 
@@ -56,21 +57,21 @@ export default function ProfileScreen({ navigation }: Props) {
               marginBottom: 14,
             }}
           >
-            <Text style={{ fontSize: 32, color: COLORS.navy, fontWeight: '800' }}>
+            <Text style={{ fontSize: 32, color: COLORS.navy, fontFamily: FONTS.semibold }}>
               {(profile?.full_name || '?')[0].toUpperCase()}
             </Text>
           </View>
-          <Text style={{ color: COLORS.white, fontSize: 22, fontWeight: '700' }}>
+          <Text style={{ color: COLORS.white, fontSize: 22, fontFamily: FONTS.semibold, letterSpacing: -0.02 * 22 }}>
             {profile?.full_name || 'User'}
           </Text>
-          <Text style={{ color: COLORS.gray[400], fontSize: 14, marginTop: 4 }}>
+          <Text style={{ color: COLORS.slate, fontSize: 14, fontFamily: FONTS.regular, marginTop: 4 }}>
             {profile?.email}
           </Text>
         </View>
 
         {/* Profile Completeness */}
         <Card style={{ marginBottom: 16 }}>
-          <Text style={{ color: COLORS.gray[400], fontSize: 12, fontWeight: '600', marginBottom: 8 }}>
+          <Text style={{ color: COLORS.slate, fontSize: 12, fontFamily: FONTS.medium, marginBottom: 8 }}>
             PROFILE COMPLETENESS
           </Text>
           <ProgressBar
@@ -84,10 +85,10 @@ export default function ProfileScreen({ navigation }: Props) {
         <Card style={{ marginBottom: 16 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <View>
-              <Text style={{ color: COLORS.gray[400], fontSize: 12, fontWeight: '600', marginBottom: 4 }}>
+              <Text style={{ color: COLORS.slate, fontSize: 12, fontFamily: FONTS.medium, marginBottom: 4 }}>
                 CDL STAGE
               </Text>
-              <Text style={{ color: COLORS.white, fontSize: 16, fontWeight: '600' }}>
+              <Text style={{ color: COLORS.white, fontSize: 16, fontFamily: FONTS.semibold }}>
                 {stageLabel}
               </Text>
             </View>
@@ -97,12 +98,14 @@ export default function ProfileScreen({ navigation }: Props) {
         {/* Streak */}
         <Card style={{ marginBottom: 16 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ fontSize: 28, marginRight: 12 }}>🔥</Text>
+            <View style={{ marginRight: 12 }}>
+              <Flame size={28} color={COLORS.amber} />
+            </View>
             <View>
-              <Text style={{ color: COLORS.white, fontSize: 20, fontWeight: '800' }}>
+              <Text style={{ color: COLORS.white, fontSize: 20, fontFamily: FONTS.semibold, letterSpacing: -0.02 * 20 }}>
                 {stats.streakCount} day streak
               </Text>
-              <Text style={{ color: COLORS.gray[400], fontSize: 13 }}>
+              <Text style={{ color: COLORS.slate, fontSize: 13, fontFamily: FONTS.regular }}>
                 Keep practicing daily!
               </Text>
             </View>
@@ -111,27 +114,27 @@ export default function ProfileScreen({ navigation }: Props) {
 
         {/* Quiz Stats */}
         <Card style={{ marginBottom: 16 }}>
-          <Text style={{ color: COLORS.gray[400], fontSize: 12, fontWeight: '600', marginBottom: 12 }}>
+          <Text style={{ color: COLORS.slate, fontSize: 12, fontFamily: FONTS.medium, marginBottom: 12 }}>
             QUIZ STATS
           </Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
             <View style={{ alignItems: 'center' }}>
-              <Text style={{ color: COLORS.amber, fontSize: 24, fontWeight: '800' }}>
+              <Text style={{ color: COLORS.amber, fontSize: 24, fontFamily: FONTS.semibold }}>
                 {stats.overallPercentage}%
               </Text>
-              <Text style={{ color: COLORS.gray[400], fontSize: 12, marginTop: 2 }}>Score</Text>
+              <Text style={{ color: COLORS.slate, fontSize: 12, fontFamily: FONTS.regular, marginTop: 2 }}>Score</Text>
             </View>
             <View style={{ alignItems: 'center' }}>
-              <Text style={{ color: COLORS.white, fontSize: 24, fontWeight: '800' }}>
+              <Text style={{ color: COLORS.white, fontSize: 24, fontFamily: FONTS.semibold }}>
                 {stats.totalAnswered}
               </Text>
-              <Text style={{ color: COLORS.gray[400], fontSize: 12, marginTop: 2 }}>Questions</Text>
+              <Text style={{ color: COLORS.slate, fontSize: 12, fontFamily: FONTS.regular, marginTop: 2 }}>Questions</Text>
             </View>
             <View style={{ alignItems: 'center' }}>
-              <Text style={{ color: COLORS.success, fontSize: 24, fontWeight: '800' }}>
+              <Text style={{ color: COLORS.success, fontSize: 24, fontFamily: FONTS.semibold }}>
                 {stats.totalCorrect}
               </Text>
-              <Text style={{ color: COLORS.gray[400], fontSize: 12, marginTop: 2 }}>Correct</Text>
+              <Text style={{ color: COLORS.slate, fontSize: 12, fontFamily: FONTS.regular, marginTop: 2 }}>Correct</Text>
             </View>
           </View>
         </Card>

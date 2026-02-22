@@ -4,7 +4,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import ScreenWrapper from '../../components/common/ScreenWrapper';
 import ProgressBar from '../../components/common/ProgressBar';
 import Button from '../../components/common/Button';
-import { COLORS, ONBOARDING_QUIZ_COUNT } from '../../constants';
+import { COLORS, FONTS, SPACING, ONBOARDING_QUIZ_COUNT } from '../../constants';
 import { useQuiz } from '../../hooks/useQuiz';
 import { useOnboarding } from '../../lib/OnboardingContext';
 
@@ -48,7 +48,7 @@ export default function OnboardingQuizScreen({ navigation }: Props) {
     return (
       <ScreenWrapper>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={{ color: COLORS.gray[400], fontSize: 16 }}>Loading questions...</Text>
+          <Text style={{ color: COLORS.slate, fontSize: 16, fontFamily: FONTS.regular }}>Loading questions...</Text>
         </View>
       </ScreenWrapper>
     );
@@ -64,12 +64,13 @@ export default function OnboardingQuizScreen({ navigation }: Props) {
   return (
     <ScreenWrapper>
       {/* Progress */}
-      <View style={{ marginTop: 16, marginBottom: 8 }}>
-        <ProgressBar progress={progress} height={6} />
+      <View style={{ marginTop: SPACING.md, marginBottom: SPACING.xs }}>
+        <ProgressBar progress={progress} />
         <Text
           style={{
-            color: COLORS.gray[400],
+            color: COLORS.slate,
             fontSize: 13,
+            fontFamily: FONTS.regular,
             textAlign: 'right',
             marginTop: 6,
           }}
@@ -79,13 +80,14 @@ export default function OnboardingQuizScreen({ navigation }: Props) {
       </View>
 
       {/* Question */}
-      <View style={{ marginTop: 16, marginBottom: 24 }}>
+      <View style={{ marginTop: SPACING.md, marginBottom: SPACING.lg }}>
         <Text
           style={{
             color: COLORS.white,
             fontSize: 20,
-            fontWeight: '700',
+            fontFamily: FONTS.semibold,
             lineHeight: 28,
+            letterSpacing: -0.02 * 20,
           }}
         >
           {currentQuestion.question_text}
@@ -93,12 +95,12 @@ export default function OnboardingQuizScreen({ navigation }: Props) {
       </View>
 
       {/* Options */}
-      <View style={{ gap: 12 }}>
+      <View style={{ gap: SPACING.sm }}>
         {options.map((option) => {
           const isSelected = selectedAnswer === option.key;
           const isCorrect = option.key === currentQuestion.correct_answer;
           let bgColor = COLORS.navyLight;
-          let borderColor = 'rgba(255,255,255,0.08)';
+          let borderColor = COLORS.navyMid;
 
           if (showFeedback) {
             if (isCorrect) {
@@ -120,10 +122,10 @@ export default function OnboardingQuizScreen({ navigation }: Props) {
               activeOpacity={0.7}
               style={{
                 backgroundColor: bgColor,
-                borderWidth: 1.5,
+                borderWidth: 1,
                 borderColor,
                 borderRadius: 14,
-                padding: 16,
+                padding: SPACING.md,
                 flexDirection: 'row',
                 alignItems: 'center',
               }}
@@ -142,7 +144,7 @@ export default function OnboardingQuizScreen({ navigation }: Props) {
                 <Text
                   style={{
                     color: isSelected && !showFeedback ? COLORS.navy : COLORS.white,
-                    fontWeight: '700',
+                    fontFamily: FONTS.semibold,
                     fontSize: 14,
                   }}
                 >
@@ -153,6 +155,7 @@ export default function OnboardingQuizScreen({ navigation }: Props) {
                 style={{
                   color: COLORS.white,
                   fontSize: 15,
+                  fontFamily: FONTS.regular,
                   flex: 1,
                   lineHeight: 22,
                 }}
@@ -166,27 +169,27 @@ export default function OnboardingQuizScreen({ navigation }: Props) {
 
       {/* Feedback */}
       {showFeedback && (
-        <View style={{ marginTop: 20 }}>
+        <View style={{ marginTop: SPACING.cardPadding }}>
           <View
             style={{
               backgroundColor: wasCorrect ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)',
               borderRadius: 12,
-              padding: 16,
-              marginBottom: 16,
+              padding: SPACING.md,
+              marginBottom: SPACING.md,
             }}
           >
             <Text
               style={{
                 color: wasCorrect ? COLORS.success : COLORS.error,
                 fontSize: 15,
-                fontWeight: '700',
+                fontFamily: FONTS.semibold,
                 marginBottom: 6,
               }}
             >
               {wasCorrect ? 'Correct!' : 'Incorrect'}
             </Text>
             {currentQuestion.explanation && (
-              <Text style={{ color: COLORS.gray[300], fontSize: 14, lineHeight: 20 }}>
+              <Text style={{ color: COLORS.slate, fontSize: 14, fontFamily: FONTS.regular, lineHeight: 20 }}>
                 {currentQuestion.explanation}
               </Text>
             )}

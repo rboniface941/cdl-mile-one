@@ -5,7 +5,7 @@ import { RouteProp } from '@react-navigation/native';
 import ScreenWrapper from '../../components/common/ScreenWrapper';
 import Button from '../../components/common/Button';
 import Card from '../../components/common/Card';
-import { COLORS } from '../../constants';
+import { COLORS, FONTS, SPACING } from '../../constants';
 
 type Props = {
   navigation: NativeStackNavigationProp<any>;
@@ -40,31 +40,31 @@ export default function QuizResultsScreen({ navigation, route }: Props) {
             width: 150,
             height: 150,
             borderRadius: 75,
-            borderWidth: 5,
+            borderWidth: 3,
             borderColor: grade.color,
             justifyContent: 'center',
             alignItems: 'center',
             marginBottom: 20,
           }}
         >
-          <Text style={{ color: COLORS.white, fontSize: 44, fontWeight: '800' }}>
+          <Text style={{ color: COLORS.white, fontSize: 44, fontFamily: FONTS.semibold, letterSpacing: -0.02 * 44 }}>
             {percentage}%
           </Text>
         </View>
 
-        <Text style={{ color: grade.color, fontSize: 22, fontWeight: '700', marginBottom: 8 }}>
+        <Text style={{ color: grade.color, fontSize: 22, fontFamily: FONTS.semibold, letterSpacing: -0.02 * 22, marginBottom: 8 }}>
           {grade.label}
         </Text>
-        <Text style={{ color: COLORS.gray[400], fontSize: 15 }}>
+        <Text style={{ color: COLORS.slate, fontSize: 15, fontFamily: FONTS.regular }}>
           {score} out of {total} correct
         </Text>
-        <Text style={{ color: COLORS.gray[500], fontSize: 13, marginTop: 4 }}>
+        <Text style={{ color: COLORS.slate, fontSize: 13, fontFamily: FONTS.regular, marginTop: 4 }}>
           {modeLabels[mode]}
         </Text>
 
         {mode === 'mock' && (
           <Card style={{ marginTop: 24, width: '100%' }}>
-            <Text style={{ color: COLORS.white, fontSize: 14, textAlign: 'center' }}>
+            <Text style={{ color: COLORS.white, fontSize: 14, fontFamily: FONTS.regular, textAlign: 'center' }}>
               {percentage >= 80
                 ? 'You passed! This score would pass the CDL knowledge test in most states.'
                 : 'Most states require 80% to pass. Keep studying and try again!'}
@@ -79,7 +79,7 @@ export default function QuizResultsScreen({ navigation, route }: Props) {
           />
           <Button
             title="Try Again"
-            variant="outline"
+            variant="secondary"
             onPress={() => {
               navigation.replace('QuizSession', { mode, category });
             }}

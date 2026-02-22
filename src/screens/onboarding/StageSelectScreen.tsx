@@ -1,13 +1,21 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Search, FileText, BookOpen, Award, ChevronRight } from 'lucide-react-native';
 import ScreenWrapper from '../../components/common/ScreenWrapper';
-import { COLORS, CDL_STAGES } from '../../constants';
+import { COLORS, FONTS, SPACING, CDL_STAGES } from '../../constants';
 import { useOnboarding } from '../../lib/OnboardingContext';
 import { CDLStage } from '../../types';
 
 type Props = {
   navigation: NativeStackNavigationProp<any>;
+};
+
+const STAGE_ICONS: Record<string, React.ReactNode> = {
+  researching: <Search size={24} color={COLORS.amber} />,
+  ready_to_enroll: <FileText size={24} color={COLORS.amber} />,
+  in_school: <BookOpen size={24} color={COLORS.amber} />,
+  graduated: <Award size={24} color={COLORS.amber} />,
 };
 
 export default function StageSelectScreen({ navigation }: Props) {
@@ -26,9 +34,9 @@ export default function StageSelectScreen({ navigation }: Props) {
           <Text
             style={{
               fontSize: 40,
-              fontWeight: '800',
+              fontFamily: FONTS.semibold,
               color: COLORS.white,
-              letterSpacing: -1,
+              letterSpacing: -0.02 * 40,
             }}
           >
             Mile One
@@ -37,8 +45,8 @@ export default function StageSelectScreen({ navigation }: Props) {
             style={{
               fontSize: 15,
               color: COLORS.amber,
-              marginTop: 8,
-              fontWeight: '500',
+              marginTop: SPACING.xs,
+              fontFamily: FONTS.medium,
               textAlign: 'center',
               lineHeight: 22,
             }}
@@ -51,17 +59,18 @@ export default function StageSelectScreen({ navigation }: Props) {
         <Text
           style={{
             fontSize: 22,
-            fontWeight: '700',
+            fontFamily: FONTS.semibold,
             color: COLORS.white,
             textAlign: 'center',
-            marginBottom: 24,
+            marginBottom: SPACING.lg,
+            letterSpacing: -0.02 * 22,
           }}
         >
           Where are you in your CDL journey?
         </Text>
 
         {/* Options */}
-        <View style={{ gap: 12 }}>
+        <View style={{ gap: SPACING.sm }}>
           {CDL_STAGES.map((option) => (
             <TouchableOpacity
               key={option.value}
@@ -69,26 +78,28 @@ export default function StageSelectScreen({ navigation }: Props) {
               activeOpacity={0.7}
               style={{
                 backgroundColor: COLORS.navyLight,
-                borderWidth: 1.5,
-                borderColor: 'rgba(255,255,255,0.08)',
+                borderWidth: 1,
+                borderColor: COLORS.navyMid,
                 borderRadius: 16,
-                padding: 20,
+                padding: SPACING.cardPadding,
                 flexDirection: 'row',
                 alignItems: 'center',
               }}
             >
-              <Text style={{ fontSize: 24, marginRight: 14 }}>{option.emoji}</Text>
+              <View style={{ marginRight: 14 }}>
+                {STAGE_ICONS[option.value]}
+              </View>
               <Text
                 style={{
                   color: COLORS.white,
                   fontSize: 16,
-                  fontWeight: '600',
+                  fontFamily: FONTS.semibold,
                   flex: 1,
                 }}
               >
                 {option.label}
               </Text>
-              <Text style={{ color: COLORS.gray[500], fontSize: 20 }}>›</Text>
+              <ChevronRight size={20} color={COLORS.slate} />
             </TouchableOpacity>
           ))}
         </View>

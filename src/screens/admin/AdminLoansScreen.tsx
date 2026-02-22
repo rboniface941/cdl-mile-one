@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, FlatList, Alert } from 'react-native';
 import ScreenWrapper from '../../components/common/ScreenWrapper';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
-import { COLORS } from '../../constants';
+import { COLORS, FONTS } from '../../constants';
 import { supabase } from '../../lib/supabase';
 import { LoanApplication } from '../../types';
 
@@ -60,22 +60,22 @@ export default function AdminLoansScreen() {
     <Card style={{ marginBottom: 12 }} padding={16}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
         <View style={{ flex: 1 }}>
-          <Text style={{ color: COLORS.white, fontSize: 16, fontWeight: '700' }}>
+          <Text style={{ color: COLORS.white, fontSize: 16, fontFamily: FONTS.semibold }}>
             {item.full_name}
           </Text>
-          <Text style={{ color: COLORS.gray[400], fontSize: 13, marginTop: 2 }}>
+          <Text style={{ color: COLORS.slate, fontSize: 13, fontFamily: FONTS.regular, marginTop: 2 }}>
             {item.email} · {item.phone}
           </Text>
         </View>
         <View
           style={{
-            backgroundColor: `${statusColors[item.status] || COLORS.gray[500]}20`,
+            backgroundColor: `${statusColors[item.status] || COLORS.slate}20`,
             borderRadius: 8,
             paddingHorizontal: 10,
             paddingVertical: 4,
           }}
         >
-          <Text style={{ color: statusColors[item.status] || COLORS.gray[400], fontSize: 12, fontWeight: '700', textTransform: 'uppercase' }}>
+          <Text style={{ color: statusColors[item.status] || COLORS.slate, fontSize: 12, fontFamily: FONTS.semibold, textTransform: 'uppercase' }}>
             {item.status}
           </Text>
         </View>
@@ -83,24 +83,24 @@ export default function AdminLoansScreen() {
 
       <View style={{ flexDirection: 'row', gap: 20, marginBottom: 10 }}>
         <View>
-          <Text style={{ color: COLORS.gray[500], fontSize: 11 }}>AMOUNT</Text>
-          <Text style={{ color: COLORS.amber, fontSize: 15, fontWeight: '700' }}>
+          <Text style={{ color: COLORS.slate, fontSize: 11, fontFamily: FONTS.medium }}>AMOUNT</Text>
+          <Text style={{ color: COLORS.amber, fontSize: 15, fontFamily: FONTS.semibold }}>
             ${item.loan_amount.toLocaleString()}
           </Text>
         </View>
         <View>
-          <Text style={{ color: COLORS.gray[500], fontSize: 11 }}>INCOME</Text>
-          <Text style={{ color: COLORS.white, fontSize: 15 }}>
+          <Text style={{ color: COLORS.slate, fontSize: 11, fontFamily: FONTS.medium }}>INCOME</Text>
+          <Text style={{ color: COLORS.white, fontSize: 15, fontFamily: FONTS.regular }}>
             ${item.monthly_income.toLocaleString()}/mo
           </Text>
         </View>
         <View>
-          <Text style={{ color: COLORS.gray[500], fontSize: 11 }}>ZIP</Text>
-          <Text style={{ color: COLORS.white, fontSize: 15 }}>{item.zip_code}</Text>
+          <Text style={{ color: COLORS.slate, fontSize: 11, fontFamily: FONTS.medium }}>ZIP</Text>
+          <Text style={{ color: COLORS.white, fontSize: 15, fontFamily: FONTS.regular }}>{item.zip_code}</Text>
         </View>
       </View>
 
-      <Text style={{ color: COLORS.gray[500], fontSize: 12, marginBottom: 10 }}>
+      <Text style={{ color: COLORS.slate, fontSize: 12, fontFamily: FONTS.regular, marginBottom: 10 }}>
         {item.employment_status} · Submitted {new Date(item.submitted_at).toLocaleDateString()}
       </Text>
 
@@ -123,7 +123,7 @@ export default function AdminLoansScreen() {
   return (
     <ScreenWrapper scrollable={false} padding={false}>
       <View style={{ paddingHorizontal: 20, paddingTop: 16 }}>
-        <Text style={{ color: COLORS.white, fontSize: 24, fontWeight: '800', marginBottom: 16 }}>
+        <Text style={{ color: COLORS.white, fontSize: 24, fontFamily: FONTS.semibold, letterSpacing: -0.02 * 24, marginBottom: 16 }}>
           Loan Applications
         </Text>
 
@@ -139,7 +139,7 @@ export default function AdminLoansScreen() {
               onPress={() => setFilter(item)}
               style={{
                 backgroundColor: filter === item ? COLORS.amber : COLORS.navyLight,
-                borderRadius: 20,
+                borderRadius: 12,
                 paddingHorizontal: 16,
                 paddingVertical: 8,
                 marginRight: 8,
@@ -147,9 +147,9 @@ export default function AdminLoansScreen() {
             >
               <Text
                 style={{
-                  color: filter === item ? COLORS.navy : COLORS.gray[400],
+                  color: filter === item ? COLORS.navy : COLORS.slate,
                   fontSize: 13,
-                  fontWeight: '600',
+                  fontFamily: FONTS.medium,
                   textTransform: 'capitalize',
                 }}
               >
@@ -169,7 +169,7 @@ export default function AdminLoansScreen() {
         onRefresh={fetchApplications}
         ListEmptyComponent={
           <View style={{ alignItems: 'center', paddingTop: 40 }}>
-            <Text style={{ color: COLORS.gray[500], fontSize: 15 }}>No applications found</Text>
+            <Text style={{ color: COLORS.slate, fontSize: 15, fontFamily: FONTS.regular }}>No applications found</Text>
           </View>
         }
       />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, TextInputProps, ViewStyle } from 'react-native';
-import { COLORS } from '../../constants';
+import { COLORS, FONTS } from '../../constants';
 
 interface InputProps extends TextInputProps {
   label?: string;
@@ -14,9 +14,9 @@ export default function Input({ label, error, containerStyle, style, ...props }:
       {label && (
         <Text
           style={{
-            color: COLORS.gray[300],
+            color: COLORS.slate,
             fontSize: 14,
-            fontWeight: '500',
+            fontFamily: FONTS.medium,
             marginBottom: 8,
           }}
         >
@@ -24,23 +24,26 @@ export default function Input({ label, error, containerStyle, style, ...props }:
         </Text>
       )}
       <TextInput
-        placeholderTextColor={COLORS.gray[500]}
+        placeholderTextColor={COLORS.navyMid}
         style={[
           {
             backgroundColor: COLORS.navyLight,
             borderWidth: 1,
-            borderColor: error ? COLORS.error : 'rgba(255,255,255,0.1)',
+            borderColor: error ? COLORS.error : COLORS.navyMid,
             borderRadius: 12,
             padding: 14,
             color: COLORS.white,
             fontSize: 16,
+            fontFamily: FONTS.regular,
           },
           style,
         ]}
         {...props}
       />
       {error && (
-        <Text style={{ color: COLORS.error, fontSize: 12, marginTop: 4 }}>{error}</Text>
+        <Text style={{ color: COLORS.error, fontSize: 13, fontFamily: FONTS.regular, marginTop: 4 }}>
+          {error}
+        </Text>
       )}
     </View>
   );
