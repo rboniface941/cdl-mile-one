@@ -32,6 +32,8 @@ export const QUIZ_CATEGORIES: QuizCategory[] = [
   'Hazmat',
   'Tanker',
   'Doubles/Triples',
+  'Passenger',
+  'Bus',
   'Pre-Trip Inspection',
   'Basic Controls',
 ];

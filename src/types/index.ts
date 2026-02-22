@@ -34,6 +34,8 @@ export type QuizCategory =
   | 'Hazmat'
   | 'Tanker'
   | 'Doubles/Triples'
+  | 'Passenger'
+  | 'Bus'
   | 'Pre-Trip Inspection'
   | 'Basic Controls';
 
