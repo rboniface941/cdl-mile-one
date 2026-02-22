@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { BookOpen, Banknote, Briefcase } from 'lucide-react-native';
+import { BookOpen, Briefcase, CreditCard } from 'lucide-react-native';
 import { useAuthContext } from '../lib/AuthContext';
 import { useOnboarding } from '../lib/OnboardingContext';
 import { COLORS, FONTS } from '../constants';
@@ -13,16 +13,15 @@ import StageSelectScreen from '../screens/onboarding/StageSelectScreen';
 import OnboardingQuizScreen from '../screens/onboarding/OnboardingQuizScreen';
 import OnboardingResultsScreen from '../screens/onboarding/OnboardingResultsScreen';
 
-// Quiz Screens
-import QuizHomeScreen from '../screens/quiz/QuizHomeScreen';
-import QuizSessionScreen from '../screens/quiz/QuizSessionScreen';
-import CategorySelectScreen from '../screens/quiz/CategorySelectScreen';
-import QuizResultsScreen from '../screens/quiz/QuizResultsScreen';
+// Study Screens
+import StudyCategoryScreen from '../screens/study/StudyCategoryScreen';
+import PracticeScreen from '../screens/study/PracticeScreen';
+import ExamSetupScreen from '../screens/study/ExamSetupScreen';
+import ExamScreen from '../screens/study/ExamScreen';
+import ExamResultsScreen from '../screens/study/ExamResultsScreen';
 
 // Funding Screens
 import FundingHomeScreen from '../screens/funding/FundingHomeScreen';
-import FundingApplicationScreen from '../screens/funding/FundingApplicationScreen';
-import FundingConfirmationScreen from '../screens/funding/FundingConfirmationScreen';
 
 // Jobs Screens
 import JobsHomeScreen from '../screens/jobs/JobsHomeScreen';
@@ -37,9 +36,12 @@ import ProfileScreen from '../screens/profile/ProfileScreen';
 import AdminLoansScreen from '../screens/admin/AdminLoansScreen';
 import AdminApplicationsScreen from '../screens/admin/AdminApplicationsScreen';
 
+// Interstitial
+import InterstitialSheet from '../components/InterstitialSheet';
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-const QuizStack = createNativeStackNavigator();
+const StudyStack = createNativeStackNavigator();
 const FundingStack = createNativeStackNavigator();
 const JobsStack = createNativeStackNavigator();
 
@@ -48,39 +50,22 @@ const screenOptions = {
   contentStyle: { backgroundColor: COLORS.navy },
 };
 
-function QuizStackNavigator() {
+function StudyStackNavigator() {
   return (
-    <QuizStack.Navigator screenOptions={screenOptions}>
-      <QuizStack.Screen name="QuizHome" component={QuizHomeScreen} />
-      <QuizStack.Screen name="QuizSession" component={QuizSessionScreen} />
-      <QuizStack.Screen name="DailyPractice" component={DailyPracticeEntry} />
-      <QuizStack.Screen name="MockExam" component={MockExamEntry} />
-      <QuizStack.Screen name="CategorySelect" component={CategorySelectScreen} />
-      <QuizStack.Screen name="QuizResults" component={QuizResultsScreen} />
-    </QuizStack.Navigator>
+    <StudyStack.Navigator screenOptions={screenOptions}>
+      <StudyStack.Screen name="StudyCategory" component={StudyCategoryScreen} />
+      <StudyStack.Screen name="PracticeSession" component={PracticeScreen} />
+      <StudyStack.Screen name="ExamSetup" component={ExamSetupScreen} />
+      <StudyStack.Screen name="ExamSession" component={ExamScreen} />
+      <StudyStack.Screen name="ExamResults" component={ExamResultsScreen} />
+    </StudyStack.Navigator>
   );
-}
-
-function DailyPracticeEntry({ navigation }: any) {
-  React.useEffect(() => {
-    navigation.replace('QuizSession', { mode: 'daily' });
-  }, []);
-  return null;
-}
-
-function MockExamEntry({ navigation }: any) {
-  React.useEffect(() => {
-    navigation.replace('QuizSession', { mode: 'mock' });
-  }, []);
-  return null;
 }
 
 function FundingStackNavigator() {
   return (
     <FundingStack.Navigator screenOptions={screenOptions}>
       <FundingStack.Screen name="FundingHome" component={FundingHomeScreen} />
-      <FundingStack.Screen name="FundingApplication" component={FundingApplicationScreen} />
-      <FundingStack.Screen name="FundingConfirmation" component={FundingConfirmationScreen} />
     </FundingStack.Navigator>
   );
 }
@@ -96,14 +81,13 @@ function JobsStackNavigator() {
   );
 }
 
-const TAB_ICONS: Record<string, React.ComponentType<any>> = {
-  Study: BookOpen,
-  Funding: Banknote,
-  Jobs: Briefcase,
-};
-
 function TabIcon({ name, focused, badge }: { name: string; focused: boolean; badge?: boolean }) {
-  const IconComponent = TAB_ICONS[name] || BookOpen;
+  const icons: Record<string, React.ComponentType<any>> = {
+    Study: BookOpen,
+    Jobs: Briefcase,
+    Funding: CreditCard,
+  };
+  const IconComponent = icons[name] || BookOpen;
 
   return (
     <View style={{ alignItems: 'center', paddingTop: 6 }}>
@@ -143,10 +127,21 @@ function TabIcon({ name, focused, badge }: { name: string; focused: boolean; bad
 
 function MainTabs() {
   const { profile } = useAuthContext();
-  const showJobBadge = (profile?.profile_completeness || 0) >= 100;
+  const completeness = profile?.profile_completeness || 0;
+  const showJobBadge = completeness >= 50;
+  const isGraduated = profile?.stage === 'graduated';
+  const [isFirstOpen, setIsFirstOpen] = useState(true);
+
+  // For graduated users, Jobs is default on first open only
+  useEffect(() => {
+    if (isFirstOpen) {
+      setIsFirstOpen(false);
+    }
+  }, []);
 
   return (
     <Tab.Navigator
+      initialRouteName={isGraduated && isFirstOpen ? 'JobsTab' : 'StudyTab'}
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
@@ -162,25 +157,29 @@ function MainTabs() {
     >
       <Tab.Screen
         name="StudyTab"
-        component={QuizStackNavigator}
+        component={StudyStackNavigator}
         options={{
           tabBarIcon: ({ focused }) => <TabIcon name="Study" focused={focused} />,
-        }}
-      />
-      <Tab.Screen
-        name="FundingTab"
-        component={FundingStackNavigator}
-        options={{
-          tabBarIcon: ({ focused }) => <TabIcon name="Funding" focused={focused} />,
         }}
       />
       <Tab.Screen
         name="JobsTab"
         component={JobsStackNavigator}
         options={{
-          tabBarIcon: ({ focused }) => <TabIcon name="Jobs" focused={focused} badge={showJobBadge} />,
+          tabBarIcon: ({ focused }) => (
+            <TabIcon name="Jobs" focused={focused} badge={showJobBadge} />
+          ),
         }}
       />
+      {!isGraduated && (
+        <Tab.Screen
+          name="FundingTab"
+          component={FundingStackNavigator}
+          options={{
+            tabBarIcon: ({ focused }) => <TabIcon name="Funding" focused={focused} />,
+          }}
+        />
+      )}
     </Tab.Navigator>
   );
 }
@@ -221,12 +220,12 @@ export default function AppNavigator() {
           <>
             <Stack.Screen name="Main" component={MainTabs} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
-            <Stack.Screen name="ProfileBuilder" component={ProfileBuilderScreen} />
             <Stack.Screen name="AdminLoans" component={AdminLoansScreen} />
             <Stack.Screen name="AdminApplications" component={AdminApplicationsScreen} />
           </>
         )}
       </Stack.Navigator>
+      {isAuthenticated && <InterstitialSheet />}
     </NavigationContainer>
   );
 }

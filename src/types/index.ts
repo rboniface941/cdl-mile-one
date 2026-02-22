@@ -10,6 +10,7 @@ export interface Profile {
   streak_count: number;
   last_practice_date: string | null;
   profile_completeness: number;
+  current_interstitial_index: number;
   created_at: string;
   updated_at: string;
 }
@@ -46,6 +47,16 @@ export interface UserAnswer {
   selected_answer: string;
   was_correct: boolean;
   answered_at: string;
+}
+
+export interface QuizSession {
+  id: string;
+  category: QuizCategory;
+  mode: 'practice' | 'exam';
+  score: number;
+  total: number;
+  timeSeconds: number;
+  completedAt: string;
 }
 
 export interface LoanApplication {
@@ -131,4 +142,14 @@ export interface CategoryStats {
   total: number;
   correct: number;
   percentage: number;
+}
+
+export interface InterstitialQuestion {
+  index: number;
+  type: 'bottom-sheet' | 'full-screen';
+  title: string;
+  subtext: string;
+  inputType: 'dropdown' | 'single-select' | 'multi-select' | 'numeric-input';
+  options?: string[];
+  field: string;
 }

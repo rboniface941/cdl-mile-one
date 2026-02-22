@@ -2,6 +2,12 @@
 -- Run this in the Supabase SQL Editor to set up all tables
 
 -- ============================================================
+-- MIGRATION: Add current_interstitial_index to profiles
+-- Run this on existing databases:
+--   ALTER TABLE profiles ADD COLUMN IF NOT EXISTS current_interstitial_index INTEGER DEFAULT 0;
+-- ============================================================
+
+-- ============================================================
 -- PROFILES (extends Supabase Auth users)
 -- ============================================================
 CREATE TABLE profiles (
@@ -14,6 +20,7 @@ CREATE TABLE profiles (
   streak_count INTEGER DEFAULT 0,
   last_practice_date DATE,
   profile_completeness INTEGER DEFAULT 0,
+  current_interstitial_index INTEGER DEFAULT 0,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );

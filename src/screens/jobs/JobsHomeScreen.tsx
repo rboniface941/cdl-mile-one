@@ -56,11 +56,13 @@ export default function JobsHomeScreen({ navigation }: Props) {
   }, [navigation, fetchData]);
 
   const completeness = profile?.profile_completeness || 0;
-  const visibleCarriers = Math.max(1, Math.round((completeness / 100) * 45));
+  const stage = profile?.stage;
 
   const filteredCarriers = selectedFilter === 'All'
     ? carriers
     : carriers.filter(c => c.equipment_type === selectedFilter);
+
+  const unappliedCarriers = filteredCarriers.filter(c => !appliedCarriers.has(c.id));
 
   const getMatchScore = (carrier: Carrier): number => {
     if (!driverProfile) return 0;
@@ -72,6 +74,20 @@ export default function JobsHomeScreen({ navigation }: Props) {
     return Math.min(score, 100);
   };
 
+  const getProfileSubtext = (): string => {
+    if (completeness <= 40) {
+      return 'Complete your profile to unlock carrier matching.';
+    }
+    if (completeness <= 79) {
+      const visibleCount = Math.round((completeness / 100) * carriers.length);
+      return `You're visible to ${visibleCount} carriers \u2014 finish your profile to apply in one tap.`;
+    }
+    if (completeness <= 99) {
+      return 'Almost there \u2014 add your employment history to unlock Apply to All.';
+    }
+    return '';
+  };
+
   const handleApply = async (carrierId: number) => {
     if (!profile?.id) return;
     try {
@@ -79,10 +95,9 @@ export default function JobsHomeScreen({ navigation }: Props) {
         user_id: profile.id,
         carrier_id: carrierId,
       });
-      if (error && error.code !== '23505') throw error; // Ignore duplicate
+      if (error && error.code !== '23505') throw error;
       setAppliedCarriers(prev => new Set([...prev, carrierId]));
 
-      // Notify admin
       try {
         await supabase.functions.invoke('notify-application', {
           body: { user_id: profile.id, carrier_id: carrierId },
@@ -94,8 +109,26 @@ export default function JobsHomeScreen({ navigation }: Props) {
   };
 
   const handleApplyAll = () => {
+    if (completeness < 100) {
+      // Determine missing field for messaging
+      const missingFields: string[] = [];
+      if (!driverProfile?.cdl_class) missingFields.push('CDL class');
+      if (!driverProfile?.state_issued) missingFields.push('state');
+      if (!driverProfile?.job_type) missingFields.push('job type');
+      if ((driverProfile?.equipment_preference || []).length === 0) missingFields.push('equipment preferences');
+      if ((driverProfile?.previous_employers || []).length === 0) missingFields.push('employment history');
+
+      const missingField = missingFields.length > 0 ? missingFields[0] : 'remaining details';
+
+      // Navigate to ProfileBuilder with context
+      navigation.navigate('ProfileBuilder', {
+        message: `Your profile is ${completeness}% complete. Add ${missingField} to apply to all carriers.`,
+      });
+      return;
+    }
+
     navigation.navigate('ApplyAll', {
-      carriers: filteredCarriers.filter(c => !appliedCarriers.has(c.id)),
+      carriers: unappliedCarriers,
       completeness,
     });
   };
@@ -114,7 +147,7 @@ export default function JobsHomeScreen({ navigation }: Props) {
                 width: 48,
                 height: 48,
                 borderRadius: 12,
-                backgroundColor: 'rgba(245,158,11,0.12)',
+                backgroundColor: COLORS.navyMid,
                 justifyContent: 'center',
                 alignItems: 'center',
                 marginBottom: 12,
@@ -131,29 +164,28 @@ export default function JobsHomeScreen({ navigation }: Props) {
             </Text>
           </View>
 
-          {matchScore > 0 && (
-            <View
+          {/* Match indicator badge */}
+          <View
+            style={{
+              backgroundColor: matchScore >= 70 ? COLORS.amber : COLORS.navyMid,
+              borderRadius: 8,
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+            }}
+          >
+            <Text
               style={{
-                backgroundColor: matchScore >= 70 ? 'rgba(34,197,94,0.15)' : 'rgba(245,158,11,0.12)',
-                borderRadius: 8,
-                paddingHorizontal: 10,
-                paddingVertical: 5,
+                color: matchScore >= 70 ? COLORS.navy : COLORS.slate,
+                fontSize: 12,
+                fontFamily: FONTS.semibold,
               }}
             >
-              <Text
-                style={{
-                  color: matchScore >= 70 ? COLORS.success : COLORS.amber,
-                  fontSize: 12,
-                  fontFamily: FONTS.semibold,
-                }}
-              >
-                {matchScore}% match
-              </Text>
-            </View>
-          )}
+              {matchScore >= 70 ? 'Strong Match' : 'Partial Match'}
+            </Text>
+          </View>
         </View>
 
-        {/* Details */}
+        {/* Details row */}
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginBottom: 14 }}>
           <View>
             <Text style={{ color: COLORS.slate, fontSize: 11, fontFamily: FONTS.medium }}>PAY</Text>
@@ -169,23 +201,24 @@ export default function JobsHomeScreen({ navigation }: Props) {
           </View>
         </View>
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-            <MapPin size={14} color={COLORS.slate} />
-            <Text style={{ color: COLORS.slate, fontSize: 12, fontFamily: FONTS.regular }}>{item.location}</Text>
-          </View>
-          {item.requirements && (
-            <Text style={{ color: COLORS.slate, fontSize: 12, fontFamily: FONTS.regular }}>· {item.requirements}</Text>
-          )}
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 14 }}>
+          <MapPin size={14} color={COLORS.slate} />
+          <Text style={{ color: COLORS.slate, fontSize: 12, fontFamily: FONTS.regular }}>{item.location}</Text>
         </View>
 
+        {/* Stage-based subtext for researching */}
+        {stage === 'researching' && (
+          <Text style={{ color: COLORS.slate, fontSize: 12, fontFamily: FONTS.regular, fontStyle: 'italic', marginBottom: 10 }}>
+            Come back when you're closer to graduation
+          </Text>
+        )}
+
         <Button
-          title={hasApplied ? 'Applied' : 'Apply Now'}
-          variant={hasApplied ? 'secondary' : 'primary'}
+          title={hasApplied ? 'Applied' : 'Apply'}
+          variant={hasApplied ? 'secondary' : 'outline'}
           size="sm"
           onPress={() => !hasApplied && handleApply(item.id)}
           disabled={hasApplied}
-          style={{ marginTop: 14 }}
         />
       </Card>
     );
@@ -194,44 +227,56 @@ export default function JobsHomeScreen({ navigation }: Props) {
   return (
     <ScreenWrapper scrollable={false} padding={false}>
       <View style={{ paddingHorizontal: 20, paddingTop: 16 }}>
-        {/* Header */}
-        <Text style={{ color: COLORS.white, fontSize: 28, fontFamily: FONTS.semibold, letterSpacing: -0.02 * 28, marginBottom: 4 }}>
-          Jobs
-        </Text>
-        <Text style={{ color: COLORS.slate, fontSize: 14, fontFamily: FONTS.regular, marginBottom: 16 }}>
-          CDL Job Board
-        </Text>
-
-        {/* Profile Completeness Banner */}
-        {completeness < 100 && (
-          <Card style={{ marginBottom: 16 }} padding={14}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+        {/* Profile completeness header */}
+        {completeness < 100 ? (
+          <View style={{ marginBottom: 16 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
               <Text style={{ color: COLORS.white, fontSize: 14, fontFamily: FONTS.medium }}>
-                Complete your profile
+                Driver Profile
               </Text>
-              <Text style={{ color: COLORS.amber, fontSize: 13, fontFamily: FONTS.semibold }}>
-                Visible to {visibleCarriers} carriers
+              <Text style={{ color: COLORS.white, fontSize: 14, fontFamily: FONTS.medium }}>
+                {completeness}%
               </Text>
             </View>
-            <ProgressBar progress={completeness / 100} height={5} />
-            <TouchableOpacity onPress={() => navigation.navigate('ProfileBuilder')}>
-              <Text style={{ color: COLORS.amber, fontSize: 13, fontFamily: FONTS.medium, marginTop: 8 }}>
-                Build Profile →
-              </Text>
-            </TouchableOpacity>
-          </Card>
+            <ProgressBar
+              progress={completeness / 100}
+              height={4}
+              backgroundColor={COLORS.navyMid}
+            />
+            <Text style={{ color: COLORS.slate, fontSize: 13, fontFamily: FONTS.regular, marginTop: 8 }}>
+              {getProfileSubtext()}
+            </Text>
+          </View>
+        ) : (
+          /* 100% complete: Apply to All CTA replaces the bar */
+          unappliedCarriers.length > 0 && stage === 'graduated' ? (
+            <Button
+              title="Apply to All \u2014 1 Tap"
+              onPress={handleApplyAll}
+              style={{ marginBottom: 16 }}
+            />
+          ) : null
         )}
 
-        {/* Apply to All CTA */}
-        {filteredCarriers.filter(c => !appliedCarriers.has(c.id)).length > 0 && (
+        {/* Apply to All for graduated users with incomplete profile still shows if applicable */}
+        {completeness < 100 && unappliedCarriers.length > 0 && stage === 'graduated' && (
           <Button
-            title={`Apply to All ${filteredCarriers.filter(c => !appliedCarriers.has(c.id)).length} Carriers`}
+            title={`Apply to All ${unappliedCarriers.length} Carriers`}
             onPress={handleApplyAll}
             style={{ marginBottom: 16 }}
           />
         )}
 
-        {/* Filter Bar */}
+        {/* Apply to All for non-graduated users at 100% */}
+        {completeness >= 100 && unappliedCarriers.length > 0 && stage !== 'graduated' && (
+          <Button
+            title={`Apply to All ${unappliedCarriers.length} Carriers`}
+            onPress={handleApplyAll}
+            style={{ marginBottom: 16 }}
+          />
+        )}
+
+        {/* Filter bar */}
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}

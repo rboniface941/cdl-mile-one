@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
 import { CheckCircle } from 'lucide-react-native';
@@ -18,6 +18,7 @@ export default function ApplySuccessScreen({ navigation, route }: Props) {
   return (
     <ScreenWrapper>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingVertical: 40 }}>
+        {/* Success checkmark circle */}
         <View
           style={{
             width: 100,
@@ -42,7 +43,7 @@ export default function ApplySuccessScreen({ navigation, route }: Props) {
             marginBottom: 12,
           }}
         >
-          You've applied to {count} carriers!
+          Applications sent to {count} carriers.
         </Text>
 
         <Text
@@ -52,18 +53,44 @@ export default function ApplySuccessScreen({ navigation, route }: Props) {
             fontFamily: FONTS.regular,
             textAlign: 'center',
             lineHeight: 22,
-            marginBottom: 32,
+            marginBottom: 8,
             paddingHorizontal: 20,
           }}
         >
-          They'll review your profile and be in touch soon. Keep your profile updated for the best results.
+          They typically respond within 2-5 business days.
         </Text>
 
-        <Button
-          title="Back to Jobs"
-          onPress={() => navigation.navigate('JobsHome')}
-          style={{ width: '100%' }}
-        />
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Main', { screen: 'StudyTab' })}
+          activeOpacity={0.7}
+        >
+          <Text
+            style={{
+              color: COLORS.amber,
+              fontSize: 15,
+              fontFamily: FONTS.medium,
+              textAlign: 'center',
+              textDecorationLine: 'underline',
+              lineHeight: 22,
+              marginBottom: 32,
+              paddingHorizontal: 20,
+            }}
+          >
+            Keep your scores up — certified drivers get more callbacks.
+          </Text>
+        </TouchableOpacity>
+
+        <View style={{ width: '100%', gap: 10 }}>
+          <Button
+            title="Back to Study"
+            onPress={() => navigation.navigate('Main', { screen: 'StudyTab' })}
+          />
+          <Button
+            title="View Jobs"
+            variant="secondary"
+            onPress={() => navigation.navigate('JobsHome')}
+          />
+        </View>
       </View>
     </ScreenWrapper>
   );
