@@ -1,23 +1,32 @@
 import { useEffect, useRef } from 'react';
 import { Platform } from 'react-native';
-import * as Notifications from 'expo-notifications';
-import * as Device from 'expo-device';
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
-});
+// Only import notifications on native platforms
+let Notifications: typeof import('expo-notifications') | null = null;
+let Device: typeof import('expo-device') | null = null;
+
+if (Platform.OS !== 'web') {
+  Notifications = require('expo-notifications');
+  Device = require('expo-device');
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+      shouldShowBanner: true,
+      shouldShowList: true,
+    }),
+  });
+}
 
 export function useNotifications() {
-  const notificationListener = useRef<Notifications.EventSubscription | null>(null);
-  const responseListener = useRef<Notifications.EventSubscription | null>(null);
+  const notificationListener = useRef<any>(null);
+  const responseListener = useRef<any>(null);
 
   useEffect(() => {
+    if (Platform.OS === 'web' || !Notifications) return;
+
     registerForPushNotifications();
     scheduleDailyReminder();
 
@@ -38,7 +47,7 @@ export function useNotifications() {
 }
 
 async function registerForPushNotifications() {
-  if (!Device.isDevice) return;
+  if (!Notifications || !Device || !Device.isDevice) return;
 
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;
@@ -60,6 +69,8 @@ async function registerForPushNotifications() {
 }
 
 async function scheduleDailyReminder() {
+  if (!Notifications) return;
+
   // Cancel existing scheduled notifications
   await Notifications.cancelAllScheduledNotificationsAsync();
 
