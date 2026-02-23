@@ -122,7 +122,7 @@ export default function StageSelectScreen({ navigation }: Props) {
           source={{
             uri: supabase.storage
               .from('assets')
-              .getPublicUrl('transtech-logo.png').data.publicUrl,
+              .getPublicUrl('TT logo.png').data.publicUrl,
           }}
           style={{ width: 120, height: 40 }}
           resizeMode="contain"
