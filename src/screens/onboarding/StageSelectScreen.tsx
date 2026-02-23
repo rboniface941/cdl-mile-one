@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Search, FileText, BookOpen, Award, ChevronRight } from 'lucide-react-native';
 import ScreenWrapper from '../../components/common/ScreenWrapper';
 import { COLORS, FONTS, SPACING, CDL_STAGES } from '../../constants';
 import { useOnboarding } from '../../lib/OnboardingContext';
+import { supabase } from '../../lib/supabase';
 import { CDLStage } from '../../types';
 
 type Props = {
@@ -103,6 +104,29 @@ export default function StageSelectScreen({ navigation }: Props) {
             </TouchableOpacity>
           ))}
         </View>
+      </View>
+
+      {/* Powered by Transtech */}
+      <View style={{ alignItems: 'center', paddingBottom: 24 }}>
+        <Text
+          style={{
+            fontSize: 12,
+            color: COLORS.slate,
+            fontFamily: FONTS.regular,
+            marginBottom: 6,
+          }}
+        >
+          Powered by
+        </Text>
+        <Image
+          source={{
+            uri: supabase.storage
+              .from('assets')
+              .getPublicUrl('transtech-logo.png').data.publicUrl,
+          }}
+          style={{ width: 120, height: 40 }}
+          resizeMode="contain"
+        />
       </View>
     </ScreenWrapper>
   );
