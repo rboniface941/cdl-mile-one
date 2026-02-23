@@ -53,7 +53,16 @@ export default function ProfileBuilderScreen({ navigation }: Props) {
       .select('*')
       .eq('id', profile.id)
       .single();
-    if (data) setDriverProfile(data);
+    if (data) {
+      // Convert DATE (YYYY-MM-DD) from DB back to MM/YYYY for display
+      if (data.license_expiration) {
+        const d = new Date(data.license_expiration);
+        const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
+        const yyyy = d.getUTCFullYear();
+        data.license_expiration = `${mm}/${yyyy}`;
+      }
+      setDriverProfile(data);
+    }
   };
 
   const completeness = calculateCompleteness(driverProfile);
@@ -62,11 +71,22 @@ export default function ProfileBuilderScreen({ navigation }: Props) {
     if (!profile?.id) return;
     setLoading(true);
     try {
+      // Convert license_expiration from MM/YYYY to YYYY-MM-01 for the DATE column
+      let licenseExpirationDate: string | null = null;
+      if (driverProfile.license_expiration) {
+        const match = driverProfile.license_expiration.match(/^(\d{1,2})\/(\d{4})$/);
+        if (match) {
+          const month = match[1].padStart(2, '0');
+          licenseExpirationDate = `${match[2]}-${month}-01`;
+        }
+      }
+
       const { error } = await supabase
         .from('driver_profiles')
         .upsert({
           id: profile.id,
           ...driverProfile,
+          license_expiration: licenseExpirationDate,
           updated_at: new Date().toISOString(),
         });
       if (error) throw error;
